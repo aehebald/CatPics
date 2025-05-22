@@ -14,6 +14,8 @@ A React Native application that displays random cat pictures using The Cat API.
 - Node.js (v14 or newer)
 - npm or yarn
 - Expo CLI (`npm install -g expo-cli`)
+- Android Studio (for Android development)
+- JDK 11 or newer
 
 ## Installation
 
@@ -32,6 +34,7 @@ npm install
 
 ## Running the App
 
+### Using Expo Go (Easiest Method)
 1. Start the development server:
 ```bash
 npm start
@@ -41,6 +44,23 @@ npm start
 - `a` to run on Android emulator
 - `i` to run on iOS simulator
 - `w` to run in web browser
+
+### Using Android Studio
+1. Generate native Android files:
+```bash
+npx expo prebuild
+```
+
+2. Open Android Studio:
+   - Select "Open an existing project"
+   - Navigate to the `android` folder in your project
+   - Wait for Gradle sync to complete
+   - Click the "Run" button (green play icon)
+
+Or run directly from command line:
+```bash
+npm run build:android
+```
 
 ## Environment Variables
 
