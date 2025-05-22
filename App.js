@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Image, FlatList, ActivityIndicator, SafeAreaView, Text, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Image, FlatList, ActivityIndicator, SafeAreaView, Text, TouchableOpacity, Alert, Modal } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system';
@@ -12,6 +12,7 @@ export default function App() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState(new Set());
+  const [showFavorites, setShowFavorites] = useState(false);
 
   const fetchImages = async () => {
     try {
@@ -97,9 +98,20 @@ export default function App() {
     }
   };
 
+  const favoriteImages = images.filter(image => favorites.has(image.id));
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Cat Pictures</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Cat Pictures</Text>
+        <TouchableOpacity
+          style={styles.favoritesButton}
+          onPress={() => setShowFavorites(true)}
+        >
+          <Text style={styles.favoritesButtonText}>See Favorites</Text>
+        </TouchableOpacity>
+      </View>
+
       <FlatList
         data={images}
         renderItem={renderItem}
@@ -110,6 +122,37 @@ export default function App() {
           loading ? <ActivityIndicator size="large" color="#0000ff" /> : null
         )}
       />
+
+      <Modal
+        visible={showFavorites}
+        animationType="slide"
+        onRequestClose={() => setShowFavorites(false)}
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Favorite Images</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowFavorites(false)}
+            >
+              <Ionicons name="close" size={24} color="#000" />
+            </TouchableOpacity>
+          </View>
+
+          {favoriteImages.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No favorite images yet</Text>
+              <Text style={styles.emptySubText}>Add some favorites from the main screen!</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={favoriteImages}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+            />
+          )}
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -119,12 +162,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 20,
     color: '#333',
+  },
+  favoritesButton: {
+    backgroundColor: '#ff4444',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  favoritesButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   imageContainer: {
     margin: 10,
@@ -152,5 +210,43 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 5,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    backgroundColor: '#fff',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  closeButton: {
+    padding: 5,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  emptyText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
+  },
+  emptySubText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
   },
 }); 
