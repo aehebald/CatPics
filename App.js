@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Image, FlatList, ActivityIndicator, SafeAreaView, Text } from 'react-native';
+import { StyleSheet, View, Image, FlatList, ActivityIndicator, SafeAreaView, Text, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
+import * as FileSystem from 'expo-file-system';
+import { Ionicons } from '@expo/vector-icons';
 
 const API_KEY = Constants.expoConfig.extra.catApiKey;
 const API_URL = 'https://api.thecatapi.com/v1/images/search';
@@ -9,6 +11,7 @@ const API_URL = 'https://api.thecatapi.com/v1/images/search';
 export default function App() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [favorites, setFavorites] = useState(new Set());
 
   const fetchImages = async () => {
     try {
@@ -29,6 +32,36 @@ export default function App() {
     fetchImages();
   }, []);
 
+  const toggleFavorite = (imageId) => {
+    setFavorites(prevFavorites => {
+      const newFavorites = new Set(prevFavorites);
+      if (newFavorites.has(imageId)) {
+        newFavorites.delete(imageId);
+      } else {
+        newFavorites.add(imageId);
+      }
+      return newFavorites;
+    });
+  };
+
+  const downloadImage = async (imageUrl) => {
+    try {
+      const filename = imageUrl.split('/').pop();
+      const fileUri = `${FileSystem.documentDirectory}${filename}`;
+      
+      const downloadResult = await FileSystem.downloadAsync(imageUrl, fileUri);
+      
+      if (downloadResult.status === 200) {
+        Alert.alert('Success', 'Image downloaded successfully!');
+      } else {
+        Alert.alert('Error', 'Failed to download image');
+      }
+    } catch (error) {
+      console.error('Error downloading image:', error);
+      Alert.alert('Error', 'Failed to download image');
+    }
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.imageContainer}>
       <Image
@@ -36,6 +69,24 @@ export default function App() {
         style={styles.image}
         resizeMode="cover"
       />
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={() => toggleFavorite(item.id)}
+        >
+          <Ionicons
+            name={favorites.has(item.id) ? 'heart' : 'heart-outline'}
+            size={24}
+            color={favorites.has(item.id) ? '#ff4444' : '#000'}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={() => downloadImage(item.url)}
+        >
+          <Ionicons name="download-outline" size={24} color="#000" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -92,5 +143,14 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 300,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  iconButton: {
+    padding: 5,
   },
 }); 
