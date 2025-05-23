@@ -8,6 +8,9 @@ export default {
   assetBundlePatterns: [
     "**/*"
   ],
+  splash: {
+    backgroundColor: "#ffffff"
+  },
   android: {
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
@@ -26,9 +29,5 @@ export default {
     eas: {
       projectId: "ff68e745-7d71-4baf-af59-481b44d11d17"
     }
-  },
-  plugins: [
-    "expo-file-system",
-    "expo-media-library"
-  ]
+  }
 }; 
