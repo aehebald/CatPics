@@ -63,7 +63,9 @@ export default function App() {
       const downloadResult = await FileSystem.downloadAsync(imageUrl, fileUri);
       
       if (downloadResult.status === 200) {
-        Alert.alert('Success', 'Image downloaded successfully!');
+        const asset = await MediaLibrary.createAssetAsync(fileUri);
+        await MediaLibrary.createAlbumAsync('CatPics', asset, false);
+        Alert.alert('Success', 'Image saved to your gallery!');
       } else {
         Alert.alert('Error', 'Failed to download image');
       }

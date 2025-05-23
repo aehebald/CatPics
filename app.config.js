@@ -18,9 +18,13 @@ export default {
     },
     package: "com.bobdunder.catpics",
     versionCode: 1,
+    minSdkVersion: 21,
+    targetSdkVersion: 35,
     permissions: [
       "WRITE_EXTERNAL_STORAGE",
-      "READ_EXTERNAL_STORAGE"
+      "READ_EXTERNAL_STORAGE",
+      "READ_MEDIA_IMAGES",
+      "READ_MEDIA_VIDEO"
     ],
     softwareKeyboardLayoutMode: "pan"
   },

@@ -20,12 +20,16 @@
     },
     "production": {
       "android": {
-        "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease",
-        "withoutCredentials": true,
+        "buildType": "app-bundle",
+        "gradleCommand": ":app:bundleRelease",
+        "withoutCredentials": false,
         "env": {
           "ANDROID_NDK_HOME": "/opt/android-ndk",
-          "ANDROID_HOME": "/opt/android-sdk"
+          "ANDROID_HOME": "/opt/android-sdk",
+          "EXPO_ANDROID_KEYSTORE_BASE64": "C:/Users/andre/Downloads/my-release-key.jks",
+          "EXPO_ANDROID_KEYSTORE_PASSWORD": "CatPics2024!",
+          "EXPO_ANDROID_KEY_ALIAS": "catpics",
+          "EXPO_ANDROID_KEY_PASSWORD": "CatPics2024!"
         }
       }
     }
