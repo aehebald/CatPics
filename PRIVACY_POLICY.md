@@ -29,8 +29,5 @@ You have the right to:
 - Uninstall the app at any time
 - Contact us with any privacy concerns
 
-## Contact Us
-If you have any questions about this privacy policy, please contact us at [Your Contact Email].
-
-## Changes to This Policy
-We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page. 
+## Contact
+If you have any questions about this privacy policy, please contact me at andrewehebald@gmail.com.
