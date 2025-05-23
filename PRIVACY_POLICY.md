@@ -1,6 +1,6 @@
 # Privacy Policy for CatPics
 
-Last updated: [Current Date]
+Last updated: May 22 2025
 
 ## Introduction
 CatPics is a mobile application that allows users to view, favorite, and share cat pictures. This privacy policy explains how we handle your data.

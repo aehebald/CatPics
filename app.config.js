@@ -18,7 +18,8 @@ export default {
     permissions: [
       "WRITE_EXTERNAL_STORAGE",
       "READ_EXTERNAL_STORAGE"
-    ]
+    ],
+    softwareKeyboardLayoutMode: "pan"
   },
   extra: {
     catApiKey: process.env.CAT_API_KEY || 'live_tbwqYYhmHUT6XdbwWvJuMU7mqygie9JO2eGhiChXzkMwrEaWwJ2YECeUFYemBO2u',
@@ -26,4 +27,8 @@ export default {
       projectId: "ff68e745-7d71-4baf-af59-481b44d11d17"
     }
   },
+  plugins: [
+    "expo-file-system",
+    "expo-media-library"
+  ]
 }; 
