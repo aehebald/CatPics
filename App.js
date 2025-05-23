@@ -160,12 +160,6 @@ export default function App() {
             <Ionicons name="share-social" size={24} color="#000" />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.wallpaperButton}
-          onPress={() => setAsWallpaper(item.url)}
-        >
-          <Ionicons name="phone-portrait-outline" size={24} color="#000" />
-        </TouchableOpacity>
       </View>
     </View>
   );
