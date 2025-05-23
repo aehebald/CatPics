@@ -109,9 +109,15 @@ export default function App() {
       const downloadResult = await FileSystem.downloadAsync(imageUrl, fileUri);
       
       if (downloadResult.status === 200) {
+        // Save to media library first
+        const asset = await MediaLibrary.createAssetAsync(fileUri);
+        await MediaLibrary.createAlbumAsync('CatPics', asset, false);
+        
+        // Share using the asset URI
         await Share.share({
-          url: fileUri,
+          url: asset.uri,
           message: 'Check out this cute cat picture! 🐱',
+          title: 'Cat Picture',
         });
       } else {
         Alert.alert('Error', 'Failed to share image');
@@ -147,21 +153,19 @@ export default function App() {
           >
             <Ionicons name="download-outline" size={24} color="#000" />
           </TouchableOpacity>
-        </View>
-        <View style={styles.rightButtons}>
           <TouchableOpacity
             style={styles.iconButton}
             onPress={() => shareImage(item.url)}
           >
-            <Ionicons name="share-social-outline" size={24} color="#000" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.wallpaperButton}
-            onPress={() => setAsWallpaper(item.url)}
-          >
-            <Ionicons name="phone-portrait-outline" size={24} color="#000" />
+            <Ionicons name="share-social" size={24} color="#000" />
           </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          style={styles.wallpaperButton}
+          onPress={() => setAsWallpaper(item.url)}
+        >
+          <Ionicons name="phone-portrait-outline" size={24} color="#000" />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -310,19 +314,33 @@ const styles = StyleSheet.create({
   leftButtons: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  rightButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    gap: 15,
   },
   iconButton: {
-    padding: 5,
-    marginRight: 10,
-  },
-  wallpaperButton: {
-    padding: 5,
+    padding: 8,
     backgroundColor: '#f0f0f0',
     borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  wallpaperButton: {
+    padding: 8,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   modalContainer: {
     flex: 1,
