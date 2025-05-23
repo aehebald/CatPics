@@ -111,14 +111,10 @@ export default function App() {
       
       if (downloadResult.status === 200) {
         if (await Sharing.isAvailableAsync()) {
-          // Save to media library first
-          const asset = await MediaLibrary.createAssetAsync(fileUri);
-          await MediaLibrary.createAlbumAsync('CatPics', asset, false);
-          
-          // Share both message and image
-          await Share.share({
-            message: 'Check out this cute cat picture! 🐱',
-            url: asset.uri
+          await Sharing.shareAsync(fileUri, {
+            mimeType: 'image/jpeg',
+            dialogTitle: 'Check out this cute cat picture! 🐱',
+            UTI: 'public.jpeg'
           });
         } else {
           Alert.alert('Sharing not available', 'Sharing is not available on this device');
