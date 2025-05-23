@@ -4,6 +4,7 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
 import { Ionicons } from '@expo/vector-icons';
 
 const API_KEY = Constants.expoConfig.extra.catApiKey;
@@ -109,16 +110,19 @@ export default function App() {
       const downloadResult = await FileSystem.downloadAsync(imageUrl, fileUri);
       
       if (downloadResult.status === 200) {
-        // Save to media library first
-        const asset = await MediaLibrary.createAssetAsync(fileUri);
-        await MediaLibrary.createAlbumAsync('CatPics', asset, false);
-        
-        // Share using the asset URI
-        await Share.share({
-          url: asset.uri,
-          message: 'Check out this cute cat picture! 🐱',
-          title: 'Cat Picture',
-        });
+        if (await Sharing.isAvailableAsync()) {
+          // Save to media library first
+          const asset = await MediaLibrary.createAssetAsync(fileUri);
+          await MediaLibrary.createAlbumAsync('CatPics', asset, false);
+          
+          // Share both message and image
+          await Share.share({
+            message: 'Check out this cute cat picture! 🐱',
+            url: asset.uri
+          });
+        } else {
+          Alert.alert('Sharing not available', 'Sharing is not available on this device');
+        }
       } else {
         Alert.alert('Error', 'Failed to share image');
       }
